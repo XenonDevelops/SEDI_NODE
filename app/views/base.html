@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>SEDI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<link href="images/icono.png" type="image/x-icon" rel="shortcut icon" />
+		<!--[if lte IE 8]><script src="css/ie/html5shiv.js"></script><![endif]
+		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>-->
+		<script src="js/jquery.min.js"></script>
+		<script src="js/skel.min.js"></script>
+		<script src="js/init.js"></script>
+		<script src="js/bootstrap.js"></script>
+		<script src="js/bootstrap-datepicker.js"></script>
+		<script src="js/bootstrap.file-input.js"></script>
+		<script src="js/angular-file-upload-shim.js"></script> 
+		<script src="js/angular.js"></script>
+		<script src="js/angular-file-upload.js"></script> 
+		<script src="js/ui-bootstrap.min.js"></script>
+		<script src="js/aspiranteFunction.js"></script>
+		<script src="js/administradorFunction.js"></script>
+		<script src="http://localhost:8000/socket.io/socket.io.js"></script>
+		
+			
+		<noscript>
+			<link rel="stylesheet" href="css/skel.css" />
+			<link rel="stylesheet" href="css/style.css" />
+			<link rel="stylesheet" href="css/style-desktop.css" />
+			<link rel="stylesheet" href="css/style-noscript.css" />
+		</noscript>
+			<link rel="stylesheet" href="css/bootstrap.min.css">
+			<link rel="stylesheet" href="css/datepicker.css">
+		<!--[if lte IE 8]><link rel="stylesheet" href="css/ie/v8.css" /><![endif]-->
+		
+	</head>
+	<body>
+		<div id="wrapper">
+			<nav id="nav">
+				<a href="#me" class="icon fa-home active"><span>Home</span></a>
+				<a href="#work" class="fa fa-list-alt"><span>Work</span></a>
+				<a href="#contact" class="icon fa-envelope"><span>Contact</span></a>	
+				{% if name %}
+				<a href="/logout" class="icon fa-sign-out"><span>Log-out</span></a>
+				{% else %}
+				<a href="/auth/facebook" class="icon fa-facebook"><span>Login with <i class="icon fa-facebook"></i></span></a>
+				<a href="/auth/twitter" class="icon fa-twitter"><span>Login with</span></a>
+				<a href="#login" class="icon fa-sign-in"><span>Log-in</span></a>
+				{% endif %}
+			</nav>
+			
+			{% block content%}
+			{% endblock%}
+			
+		</div>
+		<div id="footer">
+			<ul class="copyright">
+				<li>&copy; CDS</li>
+				<li>Design: <a href="">Angel Lagunas</a></li>
+			</ul>
+		</div>
+	</body>
+</html>

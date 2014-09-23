@@ -1,0 +1,258 @@
+{% extends '../base.html' %}
+
+{% block content %}
+	<!--<script type="text/javascript" src="/socket.io/socket.io.js"></script>-->
+	<!-- Wrapper-->
+	<div id="main" ng-app="appAdministrador" ng-controller="administrador">
+		<article id="me" class="panel">
+			{% if not name%}
+				<header>
+					<h1>Bienvenido</h1>
+					<p>Administrador</p>
+				</header>
+				<a href="#work" class="jumplink pic">
+					<span class="arrow icon fa-chevron-right"><span>See my work</span></span>
+					<img src="images/user.jpg" alt="" />
+				</a>
+			{% else %}
+				<header>
+					<h1><%= name %></h1>
+					<p>Senior Astral Projectionist</p>
+				</header>
+				<a href="#work" class="jumplink pic">
+					<span class="arrow icon fa-chevron-right"><span>See my work</span></span>
+					<img src="<%= url_foto %>" alt="" />
+				</a>
+			{% endif %}
+		</article>
+		<article id="work" class="panel">
+			<script>$(document).ready(function(){$('input[type=file]').bootstrapFileInput();});</script>
+			<header>
+				<h2>Cargar Periodo</h2>
+				<div class="progress">
+					<div class="progress-bar progress-bar-striped active"  role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
+				    	<span class="sr-only">60% Complete</span>
+				    </div>
+				</div>
+				<hr>
+			</header>
+			<section>
+				<div class="row">
+					<div class="2u">
+						<p></p>
+					</div>
+					<div class="8u">
+						<div class="well">
+							<form action="" role="form">
+								<div class="form-group">
+								    <div class="input-group">
+								     <select class="form-control" ng-model="periodoInduccion">
+										<option ng-repeat="periodo in periodos" value="{{periodo}}">{{periodo.mesInicioPeriodo}} - {{periodo.mesFinPeriodo}}&nbsp;{{periodo.annoPeriodo}} </option>
+									</select>
+										<div class="input-group-addon text-right" style="padding=0px;">
+											<a style="margin:0px" data-target="#myModal" style="margin-left: 5%; margin-bottom: 1% "  data-toggle="modal" value="New">Nuevo</a>
+										</div>
+								    </div>
+								 </div>
+
+
+								<div class="form-group">
+									<input type="file" ng-model="archivoExcel" title="Cargar excel" class="btn-primary" style="left: -239.5px; top: 13px;" ng-file-select="onFileSelect($files)"/>	
+									
+									<div class="progress progress-bar-striped active" ng-if="uploading" style="margin-top : 0.5em;">
+										<div class="progress-bar" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: {{uploadStatusPorcent}}%">
+									    	{{mensajeUploading}}
+									    </div>
+									</div>
+								</div>
+
+								<hr>
+
+								<header>
+									<h2>Periodo de evaluación</h2>
+								</header>
+
+								<div class="form-group">
+								    <div class="input-group">
+								      <div class="input-group-addon text-right">Inicio</div>
+					                    <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+					                	<span class="input-group-btn">
+						                	<button type="button" class="btn btn-default" ng-click="open($event)">
+						                		<i class="glyphicon glyphicon-calendar"></i>
+						                	</button>
+					              		</span>
+								    </div>
+								 </div>
+
+								 <div class="form-group">
+								    <div class="input-group">
+								    	<div class="input-group-addon text-right">&nbsp;&nbsp;&nbsp;Fin</div>
+								    	<input type="text" class="form-control" datepicker-popup="{{format2}}" ng-model="dt2" is-open="opened2" min-date="minDate2" max-date="'2015-06-22'" datepicker-options="dateOptions2" date-disabled="disabled2(date, mode)" ng-required="true" close-text="Close" />
+					                	<span class="input-group-btn">
+						                	<button type="button" class="btn btn-default" ng-click="open2($event)">
+						                		<i class="glyphicon glyphicon-calendar"></i>
+						                	</button>
+					              		</span>
+								      <!--<input type='text' ng-model="fechaFinEvaluacion" class="form-control" id='datetimepicker2' data-date-format="yyyy-mm-dd" placeholder="AAAA-MM-DD" style="background-color : #E8E8E8  ;"/>-->
+								    </div>
+								 </div>
+
+
+								<div class="form-group">
+									<div class="text-right">
+										<input type="button" ng-click="newAspirantes($event)" value="Enviar" class="btn btn-success" style="left: -239.5px; top: 13px;" placeholder="fecha inicio"/>
+									</div>
+								</div>
+							</form>
+
+
+							<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+								<div class="modal-dialog">
+								    <div class="modal-content">
+								    	<form>
+									        <div class="modal-header">
+										         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+										        <h4 class="modal-title" id="myModalLabel">Nuevo Periodo</h4>
+									        </div>
+										    <div class="modal-body">
+						                        <div class="controls">
+						                        	<div class="form-group">
+													    <div class="input-group">
+													      <div class="input-group-addon text-right">Mes Inicio</div>
+													      	<select id="mesInicio" name="mesInicio" ng-model="mesInicio">
+								                                <option ng-repeat="mes in meses">{{mes}}</option>
+								                            </select>
+													    </div>
+													 </div>
+						                        </div>
+
+						                        <div class="controls">
+						                        	<div class="form-group">
+													    <div class="input-group">
+													      <div class="input-group-addon text-right">&nbsp;&nbsp;&nbsp;Mes Fin</div>
+													      	<select id="mesFin" name="mesFin" ng-model="mesFin">
+								                                <option ng-repeat="mes in meses">{{mes}}</option>
+								                            </select>
+													    </div>
+													 </div>
+
+						                            
+						                        </div>
+						                        
+						                        <div class="controls">
+						                        	<div class="form-group">
+													    <div class="input-group">
+													      <div class="input-group-addon text-right">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Año</div>
+													      	<select id="anno" name="anno" ng-model="anno">
+								                                <option ng-repeat="anno in annos">{{anno}}</option>
+								                            </select>
+													    </div>
+													</div>
+						                        </div>
+										    </div>
+									        <div class="modal-footer">
+										         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+										         <input type="button" ng-click="newPeriodo($event)" class="btn btn-primary" value="Save changes"/>
+									        </div>
+								    	</form>
+								    </div>
+								</div>
+							</div>
+
+
+							<script type="text/javascript">
+								$(document).ready(function($) {
+					                $('#datetimepicker1').datepicker();
+					                $('#datetimepicker2').datepicker();
+					            });
+					        </script>
+						</div>
+					</div>
+				</div>
+			</section>
+			
+		</article>
+		<article id="contact" class="panel">
+			<header>
+				<h2>Contact Me</h2>
+			</header>
+			<form action="#" method="post">
+				<div>
+					<div class="row">
+						<div class="6u">
+							<input type="text" name="name" placeholder="Name" />
+						</div>
+						<div class="6u">
+							<input type="text" name="email" placeholder="Email" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="12u">
+							<input type="text" name="subject" placeholder="Subject" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="12u">
+							<textarea name="message" placeholder="Message" rows="8"></textarea>
+						</div>
+					</div>
+					<div class="row">
+						<div class="12u">
+							<input type="submit" value="Send Message" />
+						</div>
+					</div>
+				</div>
+			</form>
+		</article>
+
+		{% if not name%}
+		<article id="login" class="panel">
+			<header>
+				<h2>Login</h2>
+			</header>
+
+			<form action="login" method="post">
+				<div>
+					<div class="row">
+						<div class="3u">
+							<p></p>
+						</div>
+						<div class="6u">
+							<input type="text" name="username" placeholder="Username" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="3u">
+						</div>
+						<div class="6u">
+							<input type="password" name="password" placeholder="Password" />
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="7u">
+						</div>
+						<div class="2u">
+							<input type="submit" value="Login" />
+						</div>
+					</div>
+				</div>
+			</form>
+		</article>
+	</div>
+	{% else %}
+	<script>
+		var socket = io('/indexAdmin');
+		socket.emit('nuevoUsuario', 'hola');
+
+		socket.on('respuestaServer', function(data){
+			console.log(data);
+		});
+
+		socket.on('unaEncuestaTerminada', function(data){
+			console.log(data);
+		});
+	</script>
+	{% endif %}
+
+{% endblock %}
